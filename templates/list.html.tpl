@@ -2,6 +2,7 @@
 <html>
 <body>
     <div>
+        <button onclick="location.href='/admin/create'">Add</button>
         <h4>ResponseList</h4>
         {{ if eq .len 0 }}
             <p>no data</p>
@@ -10,16 +11,16 @@
                 <tr>
                     <th>Name</th>
                     <th>Route</th>
-                    <th>AccessType</th>
-                    <th>EncodingType</th>
+                    <th>RequestMethod</th>
+                    <th>ContentType</th>
                     <th>Data</th>
                 </tr>
                 {{range $i, $res := .ress}}
                     <tr>
                         <td>{{ $res.Name }}</td>
                         <td>{{ $res.Route }}</td>
-                        <td>{{ $res.AccessType }}</td>
-                        <td>{{ $res.EncodingType }}</td>
+                        <td>{{ $res.RequestMethod }}</td>
+                        <td>{{ $res.ContentType }}</td>
                         <td>{{ $res.Data }}</td>
                     </tr>
                 {{end}}

@@ -3,8 +3,12 @@ package controller
 import (
 	"html/template"
 	"net/http"
+	"strconv"
+
+	"github.com/Mitu217/template-responsor/repository/model/enum"
 
 	"github.com/Mitu217/template-responsor/repository"
+	"github.com/Mitu217/template-responsor/repository/model"
 	"github.com/go-chi/chi"
 )
 
@@ -39,7 +43,10 @@ func (a *AdminActions) getResponseList(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *AdminActions) getCreateForm(w http.ResponseWriter, r *http.Request) {
-
+	t := template.Must(template.ParseFiles("templates/create.html.tpl"))
+	if err := t.ExecuteTemplate(w, "create.html.tpl", nil); err != nil {
+		panic(err)
+	}
 }
 
 func (a *AdminActions) getEditForm(w http.ResponseWriter, r *http.Request) {
@@ -47,8 +54,25 @@ func (a *AdminActions) getEditForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *AdminActions) createResponse(w http.ResponseWriter, r *http.Request) {
-
-	// リダイレクト
+	requestMethod, err := strconv.Atoi(r.FormValue("request-method"))
+	if err != nil {
+		panic(err)
+	}
+	contentType, err := strconv.Atoi(r.FormValue("content-type"))
+	if err != nil {
+		panic(err)
+	}
+	response := &model.Response{
+		Name:          r.FormValue("name"),
+		Route:         r.FormValue("route"),
+		RequestMethod: enum.RequestMethod(requestMethod),
+		ContentType:   enum.ContentType(contentType),
+		Data:          r.FormValue("data"),
+	}
+	if err := a.responseRepository.Create(response); err != nil {
+		panic(err)
+	}
+	http.Redirect(w, r, "/admin/list", http.StatusFound)
 }
 
 func (a *AdminActions) updateResponse(w http.ResponseWriter, r *http.Request) {

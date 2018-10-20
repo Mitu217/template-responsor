@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/Mitu217/template-responsor/repository/model"
-
+	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -79,7 +79,7 @@ func (t *SQLiteResponseRepository) Gets() ([]*model.Response, error) {
 	ress := []*model.Response{}
 	for rows.Next() {
 		res := &model.Response{}
-		err = rows.Scan(&res.Uuid, &res.Name, &res.AccessType, &res.EncodingType, &res.Route, &res.Data)
+		err = rows.Scan(&res.Uuid, &res.Name, &res.RequestMethod, &res.ContentType, &res.Route, &res.Data)
 		if err != nil {
 			return nil, err
 		}
@@ -93,7 +93,16 @@ func (t *SQLiteResponseRepository) Get(uuid string) (*model.Response, error) {
 }
 
 func (t *SQLiteResponseRepository) Create(response *model.Response) error {
-	return nil
+	if err := t.open(); err != nil {
+		return err
+	}
+	defer t.close()
+
+	query := `
+		insert into responses values(?, ?, ?, ?, ?, ?)
+	`
+	_, err := t.db.Exec(query, uuid.New(), response.Name, response.RequestMethod, response.ContentType, response.Route, response.Data)
+	return err
 }
 
 func (t *SQLiteResponseRepository) Update(response *model.Response) error {

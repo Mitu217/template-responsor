@@ -11,6 +11,12 @@
   version = "v3.3.3"
 
 [[projects]]
+  name = "github.com/google/uuid"
+  packages = ["."]
+  revision = "d460ce9f8df2e77fb1ba55ca87fafed96c607494"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/mattn/go-sqlite3"
   packages = ["."]
   revision = "25ecb14adfc7543176f7d85291ec7dba82c6f7e4"
@@ -19,6 +25,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8a0aedd00247b276cbefe737fccabbba0c817ac6665daf75fbf4fb7058440ac4"
+  inputs-digest = "f207ec003669a8519e23455871133e9fb481dc09401c60502e38653d4519111c"
   solver-name = "gps-cdcl"
   solver-version = 1
